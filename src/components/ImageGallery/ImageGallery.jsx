@@ -1,23 +1,20 @@
-
 import React from "react";
-import ImageGalleryItem from "components/ImageGalleryItem/ImageGalleryItem";
+import ImageGalleryItem from "../ImageGalleryItem/ImageGalleryItem";
+import { nanoid } from 'nanoid';
 
-
-const ImageGallery=({images})=>{
-
-return(
+const ImageGallery = ({ images }) => {
+  return (
     <ul className="gallery">
-{images.map(image =>
-    (<ImageGalleryItem key={image.id} {...images} />))} 
-    
-    
-</ul>
+      {images.map((image) => (
+  <ImageGalleryItem
+    key={nanoid()}
+    src={image.webformatURL}
+    alt={`Image ${image.id}`}
+  />
+))}
 
-
-
-
-
-)}
-
+    </ul>
+  );
+};
 
 export default ImageGallery;

@@ -17,41 +17,61 @@ class App extends React.Component{
 
   };
 
-async componentDidMount(){ 
-const savedQuery=localStorage.getItem('save-query');
-if(savedQuery!==null){
-this.setState({query:JSON.parse(savedQuery)
-})
-}
-
-try {
-  this.state({loading: true});
-  const imagesSet=await AllImages();
-
-  this.setState({images:imagesSet});
-} catch (error) {
+  async componentDidMount() {
+    const savedQuery = localStorage.getItem('save-query');
+    if (savedQuery !== null) {
+      this.setState({ query: JSON.parse(savedQuery) });
+    }
   
-}
-finally{
-  this.setState({loading:false})
-}
-
-   } 
-
-
-componentDidUpdate(prevProps, prevState){ 
-  if(this.state.page !== prevState.page || this.state.query!== prevState.query ){ 
-    this.setState((prevState) =>
-      ({page: prevState.page+1}));
+    try {
+      this.setState({ loading: true });
+      await this.fetchImages();
+    } catch (error) {
+      
+      return "Error";
+    } finally {
+      this.setState({ loading: false });
+    }
+  }
   
-} }
 
-handleClick = (evt) => {
-  evt.preventDefault();
-  const query = evt.target.elements.query;
-  this.setState({ query, images: [], page: 1 });
-}
 
+   componentDidUpdate(prevProps, prevState) { 
+    if (
+      (prevState.query !== this.state.query ||
+         prevState.page !== this.state.page )
+    ) { 
+     
+      this.fetchImages();
+    }
+  }
+  
+
+  handleClick = (evt) => {
+    evt.preventDefault();
+    const query = evt.target.elements.query.value.trim();
+  
+    if (query !== '') {
+      this.setState({ query, images: [], page: 1 }, () => {
+        this.fetchImages();
+      });
+    }
+  }
+  
+  
+
+fetchImages = async () => {
+  const { query, page } = this.state;
+  try {
+    
+    const imagesSet = await AllImages(query, page);
+    this.setState((prevState) => ({
+      images: [...prevState.images, ...imagesSet],
+    }));
+  } catch (error) {
+  
+  }
+};
 
     handleLoader=(evt)=>{
       evt.preventDefault();
@@ -60,21 +80,19 @@ handleClick = (evt) => {
     }
 
 
-render () {
-
-return(
-  <div>
-<Searchbar onSubmit={this.handleClick}/>
-  <ImageGallery images={this.state.images}/>
-
-{ this.state.loading && <div>Loading...</div>}
-
-<Button buttonLoader={this.handleLoader}/>
-          {/* <Modal></Modal>   */}
-<GlobalStyle/>
-          </div>
-
-)}}
-
+    render() {
+      const { loading, images, query} = this.state;
+      return (
+        <div>
+          <Searchbar onSubmit={this.handleClick} />
+          {query !== '' && <ImageGallery images={images} />}
+          {loading && <div>Loading...</div>}
+          <Button buttonLoadMore={this.handleLoader} />
+          <GlobalStyle />
+        </div>
+      );
+    }
+    
+  }
 
 export default App;
