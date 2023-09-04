@@ -1,17 +1,23 @@
 import React from "react";
-
-
+import PropTypes from 'prop-types';
+import './Searchbar.styled';
+import {
+  SearchbarHeader, 
+  SearchForm, 
+  SearchFormButton, 
+  SearchFormButtonLabel, 
+  SearchFormInput} from './Searchbar.styled'
 
 const Searchbar = ({onSubmit})=>{
 
 return(
-    <header className="searchbar">
-  <form className="form" onSubmit={onSubmit}>
-    <button type="submit" className="button" >
-      <span className="button-label">Search</span>
-    </button>
+    <SearchbarHeader className="searchbar">
+  <SearchForm className="form" onSubmit={onSubmit}>
+    <SearchFormButton type="submit" className="button" >
+      <SearchFormButtonLabel className="button-label">Search</SearchFormButtonLabel>
+    </SearchFormButton>
 
-    <input
+    <SearchFormInput
       className="input"
       type="text"
       autoComplete="off"
@@ -19,10 +25,16 @@ return(
       placeholder="Search images and photos"
       name="query"
     />
-  </form>
-</header>
+  </SearchForm>
+</SearchbarHeader>
 )
 
-}
+};
+
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};
+
+
 
 export default Searchbar;
