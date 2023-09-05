@@ -8,7 +8,6 @@ import {
   SearchFormButtonLabel, 
   SearchFormInput
 } from './Searchbar.styled';
-
 import { FaSearch } from 'react-icons/fa';
 
 const Searchbar = ({onSubmit}) => {
@@ -16,9 +15,10 @@ const Searchbar = ({onSubmit}) => {
     <SearchbarHeader className="searchbar">
       <SearchForm className="form" onSubmit={onSubmit}>
         <SearchFormButton type="submit" className="button">
-          <SearchFormButtonLabel className="button-label">
-            <FaSearch /> 
+        <SearchFormButtonLabel className="button-label">
+        <FaSearch />
           </SearchFormButtonLabel>
+
         </SearchFormButton>
 
         <SearchFormInput
