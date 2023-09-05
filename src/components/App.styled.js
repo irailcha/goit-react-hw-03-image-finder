@@ -8,3 +8,10 @@ export const AppStyle=styled.div`
     grid-gap: 16px;
     padding-bottom: 24px;
 `
+
+export const NoImageStyle=styled.div`
+font-size: 30px;
+margin:0 auto;
+padding: 20px;
+text-align: center;
+`

@@ -48,11 +48,12 @@ export const SearchFormButton = styled.button`
     cursor: pointer;
     outline: none;
 
-    &hover {
-        opacity: 1;
-      }
+    &:hover {
+        opacity: 1; /* Змінив &hover на &:hover */
+    }
+`;
 
- `
+ 
 
  export const SearchFormButtonLabel = styled.span`    
     position: absolute;
@@ -64,6 +65,9 @@ export const SearchFormButton = styled.button`
     white-space: nowrap;
     clip-path: inset(50%);
     border: 0;
+    z-index: 99;
+    color: black;
+
     `
   
   

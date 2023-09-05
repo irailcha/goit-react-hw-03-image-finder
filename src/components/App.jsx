@@ -7,7 +7,7 @@ import Button from './Button/Button';
 import Modal from './Modal/Modal';
 import GlobalStyle from './GlobalStyle';
 import './App.styled';
-import { AppStyle } from './App.styled';
+import { AppStyle, NoImageStyle } from './App.styled';
 
 class App extends React.Component {
   state = {
@@ -18,8 +18,7 @@ class App extends React.Component {
     showModal: false,
     selectedImage: null,
     per_page: 12,
-    loadMore: true,
-    
+    loadMore: false,
   };
 
   async componentDidMount() {
@@ -63,7 +62,7 @@ class App extends React.Component {
     try {
       const imagesSet = await AllImages(query, page);
       const { images, totalHits } = imagesSet;
-  
+
       this.setState((prevState) => ({
         images: [...prevState.images, ...images],
         loadMore: prevState.page < Math.ceil(totalHits / prevState.per_page),
@@ -72,7 +71,6 @@ class App extends React.Component {
       console.error('Error:', error);
     }
   }
-  
 
   handleLoader = (evt) => {
     evt.preventDefault();
@@ -89,13 +87,17 @@ class App extends React.Component {
   };
 
   render() {
-    const { loading, images, query, per_page, showModal, selectedImage, loadMore } = this.state;
+    const { loading, images, query, showModal, selectedImage, loadMore } = this.state;
+
+    const renderLoadMoreButton = loadMore && images.length > 0 && query !== '';
+
     return (
       <AppStyle>
         <Searchbar onSubmit={this.handleClick} />
         {query !== '' && <ImageGallery images={images} onClick={this.toggleModal} />}
         {loading && <Loader />}
-        {loadMore && per_page >= 13 && <Button buttonLoadMore={this.handleLoader} />}
+        {images.length === 0 && <NoImageStyle>No image was found for your request</NoImageStyle>}
+        {renderLoadMoreButton && <Button buttonLoadMore={this.handleLoader} />}
         {showModal && (
           <Modal selectedImage={selectedImage} onClose={this.toggleModal} />
         )}

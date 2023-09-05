@@ -6,35 +6,36 @@ import {
   SearchForm, 
   SearchFormButton, 
   SearchFormButtonLabel, 
-  SearchFormInput} from './Searchbar.styled'
+  SearchFormInput
+} from './Searchbar.styled';
 
-const Searchbar = ({onSubmit})=>{
+import { FaSearch } from 'react-icons/fa';
 
-return(
+const Searchbar = ({onSubmit}) => {
+  return (
     <SearchbarHeader className="searchbar">
-  <SearchForm className="form" onSubmit={onSubmit}>
-    <SearchFormButton type="submit" className="button" >
-      <SearchFormButtonLabel className="button-label">Search</SearchFormButtonLabel>
-    </SearchFormButton>
+      <SearchForm className="form" onSubmit={onSubmit}>
+        <SearchFormButton type="submit" className="button">
+          <SearchFormButtonLabel className="button-label">
+            <FaSearch /> 
+          </SearchFormButtonLabel>
+        </SearchFormButton>
 
-    <SearchFormInput
-      className="input"
-      type="text"
-      autoComplete="off"
-      autoFocus
-      placeholder="Search images and photos"
-      name="query"
-    />
-  </SearchForm>
-</SearchbarHeader>
-)
-
+        <SearchFormInput
+          className="input"
+          type="text"
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+          name="query"
+        />
+      </SearchForm>
+    </SearchbarHeader>
+  );
 };
 
 Searchbar.propTypes = {
   onSubmit: PropTypes.func.isRequired,
 };
-
-
 
 export default Searchbar;
