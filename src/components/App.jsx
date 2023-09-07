@@ -19,23 +19,9 @@ class App extends React.Component {
     selectedImage: null,
     per_page: 12,
     loadMore: false,
+    error: null
   };
 
-  async componentDidMount() {
-    const savedQuery = localStorage.getItem('save-query');
-    if (savedQuery !== null) {
-      this.setState({ query: JSON.parse(savedQuery) });
-    }
-
-    try {
-      this.setState({ loading: true });
-      await this.fetchImages();
-    } catch (error) {
-      console.error('Error:', error);
-    } finally {
-      this.setState({ loading: false });
-    }
-  }
 
   componentDidUpdate(prevProps, prevState) {
     if (
@@ -51,9 +37,7 @@ class App extends React.Component {
     const query = evt.target.elements.query.value.trim();
 
     if (query !== '') {
-      this.setState({ query, images: [], page: 1 }, () => {
-        this.fetchImages();
-      });
+      this.setState({ query, images: [], page: 1 });
     }
   }
 
@@ -68,12 +52,15 @@ class App extends React.Component {
         loadMore: prevState.page < Math.ceil(totalHits / prevState.per_page),
       }));
     } catch (error) {
-      console.error('Error:', error);
+      this.setState({error})
+    } finally{
+      this.setState({loading: false})
     }
+   
   }
 
-  handleLoader = (evt) => {
-    evt.preventDefault();
+  handleLoader = () => {
+    
     this.setState((prevState) => ({
       page: prevState.page + 1,
     }));
@@ -87,15 +74,16 @@ class App extends React.Component {
   };
 
   render() {
-    const { loading, images, query, showModal, selectedImage, loadMore } = this.state;
+    const { loading, images, showModal, selectedImage, loadMore, error } = this.state;
 
-    const renderLoadMoreButton = loadMore && images.length > 0 && query !== '';
+    const renderLoadMoreButton = loadMore && images.length > 0 && !loading;
 
     return (
       <AppStyle>
         <Searchbar onSubmit={this.handleClick} />
-        {query !== '' && <ImageGallery images={images} onClick={this.toggleModal} />}
+        {images.length > 0 && <ImageGallery images={images} onClick={this.toggleModal} />}
         {loading && <Loader />}
+        {error && <NoImageStyle>Sorry, something went wrong</NoImageStyle>}
         {images.length === 0 && <NoImageStyle>No image was found for your request</NoImageStyle>}
         {renderLoadMoreButton && <Button buttonLoadMore={this.handleLoader} />}
         {showModal && (

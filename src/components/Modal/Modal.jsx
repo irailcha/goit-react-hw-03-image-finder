@@ -4,17 +4,43 @@ import './Modal.styled';
 import {Overlay, ModalStyle} from "./Modal.styled";
 
 
-const Modal =({selectedImage, onClose})=>{
+class Modal extends React.Component {
 
-    return (
-        <Overlay className="Overlay" onClick={onClose}>
-  <ModalStyle className="modal">
-  <img src={selectedImage} alt="Large preview" />
-
-  </ModalStyle>
-</Overlay>
-    )
+  componentDidMount() {
+    window.addEventListener('keydown', this.handleKeyDown);
 }
+  
+  componentWillUnmount() {
+  window.removeEventListener('keydown', this.handleKeyDown);
+  }
+
+
+  handleKeyDown = evt =>{
+    if(evt.code ==='Escape'){
+      this.props.onClose();
+    }
+  }
+
+  handleBackdropClick = (evt) => { 
+
+    if (evt.currentTarget === evt.target) {
+      this.props.onClose();
+    }
+  };
+
+  render() {
+    
+    const { selectedImage } = this.props;
+    return (
+      <Overlay className="Overlay" onClick={this.handleBackdropClick}>
+        <ModalStyle className="modal">
+        <img src={selectedImage} alt="Large preview" />
+        </ModalStyle>
+      </Overlay>
+    );
+  }
+    
+};
 
 Modal.propTypes = {
     selectedImage: PropTypes.string.isRequired,

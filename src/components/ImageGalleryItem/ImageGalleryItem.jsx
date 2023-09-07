@@ -5,7 +5,7 @@ import './ImageGalleryItem.styled';
 import { GalleryItem, GalleryImage } from './ImageGalleryItem.styled';
 
 
-const ImageGalleryItem =({src, alt, onClick }) =>{
+const ImageGalleryItem =({src, alt = '', onClick }) =>{
 return(
     <GalleryItem className="gallery-item" onClick={onClick}>
   <GalleryImage src={src} alt={alt} />
